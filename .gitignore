@@ -1,0 +1,34 @@
+# Django
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+db.sqlite3
+
+# Virtual environment
+venv/
+.env/
+
+# Vue.js
+node_modules/
+dist/
+
+# IDE specific files
+.idea/
+.vscode/
+
+# Compiled Python files
+*.pyc
+
+# Compiled Vue.js files
+/dist/
+/static/
+
+# Log files
+*.log
+
+# Environment variables
+.env
+
+# macOS
+.DS_Store
