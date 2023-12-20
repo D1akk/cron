@@ -1,28 +1,75 @@
-<!-- components/Login.vue -->
 <template>
   <div>
-    <!-- Форма входа -->
-    <input v-model="username" placeholder="Username" />
-    <input v-model="password" type="password" placeholder="Password" />
-    <button @click="login">Login</button>
+    <form @submit.prevent="submitForm">
+      <div v-if="errors.wrong_credentials">
+        <small>{{ errors.wrong_credentials }}</small>
+      </div>
+      <input v-model="username" placeholder="Электронная почта" />
+      <small v-if="errors.username">{{ errors.username }}</small>
+      <input v-model="password" type="password" placeholder="Пароль" />
+      <small v-if="errors.password">{{ errors.password }}</small>
+      <button type="submit" @click="login">Войти</button>
+    </form>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
+  name: "vLogin",
   data() {
     return {
       username: "",
       password: "",
+      errors: {
+        username: "",
+        password: "",
+        wrong_credentials: "",
+      },
     };
   },
+  // ...
   methods: {
-    login() {
-      // Обработка логики входа, например, отправка запроса на сервер
-      // Имейте в виду, что это всего лишь пример. Лучше использовать сервисы API, как я показал ранее.
-      alert(`Logging in as ${this.username}`);
+    isValidForm() {
+      let valid = true;
+      if (!this.username) {
+        this.errors.username = "Поле не может быть пустым";
+        valid = false;
+      } else {
+        this.errors.username = "";
+      }
+      if (!this.password) {
+        this.errors.password = "Поле не может быть пустым";
+        valid = false;
+      } else {
+        this.errors.password = "";
+      }
+      return valid;
+    },
+    submitForm() {
+      if (this.isValidForm()) {
+        const url = "/login/";
+        axios
+          .post(url, {
+            username: this.username,
+            password: this.password,
+          })
+          .then((response) => {
+            console.log(response.data);
+          })
+          .catch((error) => {
+            if (error.response.data.non_field_errors) {
+              this.errors.wrong_credentials =
+                error.response.data.non_field_errors.join("");
+            } else {
+              this.errors.wrong_credentials = "";
+            }
+          });
+      }
     },
   },
+  // ...
 };
 </script>
 

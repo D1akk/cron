@@ -7,7 +7,7 @@ import vProfile from "../components/profile/v-profile";
 import vLogin from "../components/login/v-login";
 
 export default createRouter({
-  history: createWebHashHistory(),
+  history: createWebHashHistory(process.env.BASE_URL),
   routes: [
     {
       path: "/",

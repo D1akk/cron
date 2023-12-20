@@ -73,6 +73,12 @@ TEMPLATES = [
     },
 ]
 
+CORS_ALLOW_ALL_ORIGINS=True
+# CORS_ALLOW_CREDENTIALS=True
+CORS_ALLOWED_ORIGIN = [
+    "http://localhost:8080",
+]
+
 WSGI_APPLICATION = "config.wsgi.application"
 
 
@@ -133,7 +139,3 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
 }
-
-CORS_ALLOWED_ORIGIN = [
-    "http://localhost:8080",
-]

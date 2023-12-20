@@ -1,10 +1,12 @@
-import {createApp} from 'vue'
-import App from './App.vue'
-import router from './router/router.js';
-import './assets/styles/style.css'
+import { createApp } from "vue";
+import App from "./App.vue";
+import router from "./router/router.js";
+import "./assets/styles/style.css";
+import store from "./store/index.js";
+import axios from "axios";
+
 //import store from './store';
 
-const app = createApp(App);
-app.use(router);
-//app.use(store);
-app.mount('#app');
+axios.defaults.baseURL = "http://localhost:8000";
+
+createApp(App).use(store).use(router, axios).mount("#app");
