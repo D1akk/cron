@@ -12,18 +12,16 @@
 <script>
 import vHeader from "./components/header/v-header";
 import vFooter from "./components/footer/v-footer";
-import vLogin from "./components/login/v-login.vue";
 
 export default {
   name: "App",
   components: {
     vHeader,
     vFooter,
-    vLogin,
   },
-  mounted(){
-    this.$store.commit('initializeStore');
-  }
+  mounted() {
+    this.$store.commit("initializeStore");
+  },
 };
 </script>
 

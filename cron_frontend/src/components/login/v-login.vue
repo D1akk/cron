@@ -69,6 +69,7 @@ export default {
             this.$store.commit("setToken", response.data);
             this.username = "";
             this.password = "";
+            this.$router.push('/');
           })
           .catch((error) => {
             if (error.response.data.non_field_errors) {

@@ -36,14 +36,6 @@
                 <span>Профиль</span>
               </router-link>
             </li>
-            <li class="footer-li">
-              <router-link :to="{ name: 'login' }">
-                <svg width="24" height="24">
-                  <use xlink:href="../../assets/img/sprite.svg#profile"></use>
-                </svg>
-                <span>Логин</span>
-              </router-link>
-            </li>
           </ul>
         </nav>
       </div>
