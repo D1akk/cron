@@ -5,6 +5,7 @@ import vMyNotes from "../components/my-notes/v-my-notes";
 import vDoctors from "../components/doctors/v-doctors";
 import vProfile from "../components/profile/v-profile";
 import vLogin from "../components/login/v-login";
+import vSignup from "../components/signup/v-signup";
 
 export default createRouter({
   history: createWebHashHistory(process.env.BASE_URL),
@@ -33,6 +34,11 @@ export default createRouter({
       path: "/login",
       name: "login",
       component: vLogin,
+    },
+    {
+      path: "/signup",
+      name: "signup",
+      component: vSignup,
     },
   ],
 });

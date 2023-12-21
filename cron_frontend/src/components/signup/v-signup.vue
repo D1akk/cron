@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h3>Регистрация</h3>
     <form @submit.prevent="submitForm">
       <div v-if="errors.wrong_credentials">
         <small>{{ errors.wrong_credentials }}</small>
@@ -12,12 +13,11 @@
         <input v-model="password" type="password" placeholder="Пароль" />
         <small v-if="errors.password">{{ errors.password }}</small>
       </div>
-      <button type="submit" @click="login">Войти</button>
       <div>
-        <p>
-          <router-link to="/signup">Регистрация</router-link>
-        </p>
+        <input v-model="password" type="password" placeholder="Пароль" />
+        <small v-if="errors.password2">{{ errors.password2 }}</small>
       </div>
+      <button type="submit" @click="login">Зарегистрироваться</button>
     </form>
   </div>
 </template>
@@ -26,14 +26,16 @@
 import axios from "axios";
 
 export default {
-  name: "vLogin",
+  name: "vSignup",
   data() {
     return {
       username: "",
       password: "",
+      password2: "",
       errors: {
         username: "",
         password: "",
+        password2: "",
         wrong_credentials: "",
       },
     };
@@ -54,29 +56,38 @@ export default {
       } else {
         this.errors.password = "";
       }
+      if (this.password && this.password2 && this.password != this.password2) {
+        this.errors.password2 = "Пароли не совпадают";
+      } else {
+        this.password2 = "";
+      }
+      if(this.errors.username || this.errors.password || this.errors.password2){
+        valid = false;
+      }
       return valid;
     },
     submitForm() {
       if (this.isValidForm()) {
-        const url = "/login/";
+        const url = "/auth/users/";
         axios
           .post(url, {
             username: this.username,
             password: this.password,
           })
           .then((response) => {
-            // console.log(response.data);
-            this.$store.commit("setToken", response.data);
+            console.log(response.data);
+            this.$router.push('/login')
             this.username = "";
             this.password = "";
+            this.password2 = "";
           })
           .catch((error) => {
-            if (error.response.data.non_field_errors) {
-              this.errors.wrong_credentials =
-                error.response.data.non_field_errors.join("");
-            } else {
-              this.errors.wrong_credentials = "";
+            if(error.response.data.username){
+                this.errors.username = error.response.data.username.join('');
+            }else{
+                this.errors.username = '';
             }
+                
           });
       }
     },

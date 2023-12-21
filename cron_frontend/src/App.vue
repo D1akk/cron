@@ -21,17 +21,9 @@ export default {
     vFooter,
     vLogin,
   },
-  // data() {
-  //   return {
-  //     showLogin: false,
-  //   };
-  // },
-  // methods: {
-  //   handleLoginSuccess() {
-  //     // Обработка успешного входа
-  //     this.showLogin = false; // Скрыть компонент после успешного входа
-  //   },
-  // },
+  mounted(){
+    this.$store.commit('initializeStore');
+  }
 };
 </script>
 
