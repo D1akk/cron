@@ -1,12 +1,20 @@
 from django.urls import path
 from .views import (
     Login,
-    ListCreateNote
+    ListCreateAppointment,
+    AppointmentListView,
+    AppointmentAddView,
+    AppointmentSelectView,
+    DoctorAddView,
+    DoctorListView,
 )
 from django.contrib.auth.views import LogoutView;
 
 urlpatterns = [
     path('login/', Login.as_view(), name='login'),
-    path('logout/', LogoutView.as_view(), name='logout'),
-    path('list-create-note/', ListCreateNote.as_view(), name='list-create-note')
+    path('list-create-appointment/', ListCreateAppointment.as_view(), name='list-create-appointment'),
+    path('appointment-add/', AppointmentAddView.as_view(), name='appointment-add'),
+    path('appointment-list/', AppointmentListView.as_view(), name='appointment-list'),
+    path('doctor-add/', DoctorAddView.as_view(), name='doctor-add'),
+    path('doctor-list/', DoctorListView.as_view(), name='doctor-list')
 ]

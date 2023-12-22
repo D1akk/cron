@@ -1,8 +1,14 @@
 from rest_framework import serializers
-from .models import Note
+from .models import Appointment, Doctor
 
 
-class NoteSerializer(serializers.ModelSerializer):
+class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Note
+        model = Appointment
+        fields = "__all__"
+
+
+class DoctorSerilizer(serializers.ModelSerializer):
+    class Meta:
+        model = Doctor
         fields = "__all__"

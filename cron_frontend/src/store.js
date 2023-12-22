@@ -29,6 +29,7 @@ export default createStore({
         state.user_id = '';
         localStorage.removeItem('token');
         localStorage.removeItem('user_id');
+        state.isAuthenticated = false;
     }
   },
   actions: {},

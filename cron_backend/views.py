@@ -3,10 +3,11 @@ from rest_framework import permissions
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-
-from .models import Note
-from .serializers import NoteSerializer
+from django.conf import settings
+from .models import Appointment
+from .serializers import AppointmentSerializer
 
 
 class Login(ObtainAuthToken):
@@ -21,10 +22,47 @@ class Login(ObtainAuthToken):
             'user_id': user.id,
         })
 
-class ListCreateNote(generics.ListCreateAPIView):
+class ListCreateAppointment(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    serializer_class = NoteSerializer
+    serializer_class = AppointmentSerializer
 
     def get_queryset(self):
-        return Note.objects.filter(user=self.request.user)
+        return Appointment.objects.filter(user=self.request.user)
     
+
+class AppointmentListView(APIView):
+    def get():
+        appointments = Appointment.objects.all()
+        serializer = AppointmentSerializerSerializer(appointments, many=True)
+        return Response(serializer.data)
+
+
+class AppointmentAddView(APIView):
+    def post(self, request):
+        serializer = AppointmentSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data)
+
+class AppointmentSelectView(APIView):
+    def post(self, request):
+        client_id = request.data.get('client_id')
+        appointment_id = request.data.get('appointment_id')
+        client = settings.AUTH_USER_MODEL.objects.get(id=client_id)
+        client.appointments.add(*appointment_id)
+        client.save()
+        return Response({"massage":"Запись добавлена"})  
+
+#Временное решение класса Доктора
+class DoctorListView(APIView):
+    def get():
+        doctors = Doctor.objects.all()
+        serializer = DoctorSerilizer(doctors, many=True)
+        return Response(serializer.data)
+
+class DoctorAddView(APIView):
+    def post(self, request):
+        serializer = DoctorSerilizer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data)

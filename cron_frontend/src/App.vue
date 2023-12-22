@@ -4,7 +4,7 @@
     <keep-alive>
       <router-view></router-view>
     </keep-alive>
-    <v-footer />
+    <v-footer v-if="showFooter" />
     <v-login v-if="showLogin" @loginSuccess="handleLoginSuccess" />
   </div>
 </template>
@@ -18,6 +18,14 @@ export default {
   components: {
     vHeader,
     vFooter,
+  },
+  computed: {
+    showFooter() {
+      return this.$route.name !== "login" && this.$route.name !== "signup";
+    },
+    showLogin() {
+      return this.$route.name === "login";
+    },
   },
   mounted() {
     this.$store.commit("initializeStore");

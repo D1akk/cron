@@ -51,7 +51,6 @@
 </template>
 
 <script>
-import axios from "axios";
 export default {
   name: "v-profile",
   components: {},
@@ -60,16 +59,8 @@ export default {
   },
   methods: {
     logout() {
-      axios
-        .post("/logout/") // Замените на URL вашего сервера для выхода
-        .then(() => {
-          this.$store.commit("clearToken"); // Очистка токена в хранилище
-          // Дополнительные действия, если необходимо
-        })
-        .catch((error) => {
-          console.error("Ошибка при выходе:", error);
-          // Обработка ошибок, если необходимо
-        });
+      this.$store.commit('removeToken');
+      this.$router.push('/login');
     },
   },
 };

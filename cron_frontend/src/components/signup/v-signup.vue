@@ -40,7 +40,6 @@ export default {
       },
     };
   },
-  // ...
   methods: {
     isValidForm() {
       let valid = true;
@@ -92,10 +91,9 @@ export default {
       }
     },
   },
-  // ...
 };
 </script>
 
-<style scoped>
-/* Ваши стили для формы входа */
+<style>
+
 </style>
