@@ -7,6 +7,8 @@ from .views import (
     AppointmentSelectView,
     DoctorAddView,
     DoctorListView,
+    SpecialistListView,
+    ClinicListListView,
 )
 from django.contrib.auth.views import LogoutView;
 
@@ -16,5 +18,7 @@ urlpatterns = [
     path('appointment-add/', AppointmentAddView.as_view(), name='appointment-add'),
     path('appointment-list/', AppointmentListView.as_view(), name='appointment-list'),
     path('doctor-add/', DoctorAddView.as_view(), name='doctor-add'),
-    path('doctor-list/', DoctorListView.as_view(), name='doctor-list')
+    path('doctor-list/', DoctorListView.as_view(), name='doctor-list'),
+    path('specialist-list/', SpecialistListView.as_view(), name='specialist-list'),
+    path('clinic-list/', ClinicListListView.as_view(), name='clinic-list'),
 ]

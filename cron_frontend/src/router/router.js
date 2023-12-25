@@ -53,39 +53,39 @@ const router = createRouter({
 
 const protectedRoutes = ['my-notes', 'doctors', 'profile', 'home'];
 
-// router.beforeEach((to, from, next) => {
-//   const isProtected = protectedRoutes.includes(to.name);
-//   if (isProtected && !localStorage.getItem("token")) {
-//     next({
-//       path: "/",
-//       query: { redirect: to.fullPath },
-//     });
-//   } else {
-//     if (
-//       !isProtected &&
-//       localStorage.getItem("token") &&
-//       (to.name == "home" || to.name == "signup")
-//     ) {
-//       next({
-//         path: "",
-//       });
-//     } else {
-//       next();
-//     }
-//   }
-// });
-
 router.beforeEach((to, from, next) => {
   const isProtected = protectedRoutes.includes(to.name);
-  const isAuthenticated = localStorage.getItem('token');
-
-  if (isProtected && !isAuthenticated) {
-    next({ name: 'login', query: { redirect: to.fullPath } });
-  } else if (!isProtected && isAuthenticated) {
-    next('/');
+  if (isProtected && !localStorage.getItem("token")) {
+    next({
+      path: "/",
+      query: { redirect: to.fullPath },
+    });
   } else {
-    next();
+    if (
+      !isProtected &&
+      localStorage.getItem("token") &&
+      (to.name == "home" || to.name == "signup")
+    ) {
+      next({
+        path: "",
+      });
+    } else {
+      next();
+    }
   }
 });
+
+// router.beforeEach((to, from, next) => {
+//   const isProtected = protectedRoutes.includes(to.name);
+//   const isAuthenticated = localStorage.getItem('token');
+
+//   if (isProtected && !isAuthenticated) {
+//     next({ name: 'login', query: { redirect: to.fullPath } });
+//   } else if (!isProtected && isAuthenticated) {
+//     next('/');
+//   } else {
+//     next();
+//   }
+// });
 
 export default router;

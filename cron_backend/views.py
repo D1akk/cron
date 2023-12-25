@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from django.conf import settings
-from .models import Appointment
-from .serializers import AppointmentSerializer
+from .models import Appointment, Doctor, Specialist, Clinic
+from .serializers import AppointmentSerializer, DoctorSerilizer, SpecialistSerializer, ClinicSerializer
 
 
 class Login(ObtainAuthToken):
@@ -31,9 +31,9 @@ class ListCreateAppointment(generics.ListCreateAPIView):
     
 
 class AppointmentListView(APIView):
-    def get():
+    def get(self, request):
         appointments = Appointment.objects.all()
-        serializer = AppointmentSerializerSerializer(appointments, many=True)
+        serializer = AppointmentSerializer(appointments, many=True)
         return Response(serializer.data)
 
 
@@ -43,6 +43,7 @@ class AppointmentAddView(APIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
+
 
 class AppointmentSelectView(APIView):
     def post(self, request):
@@ -55,10 +56,11 @@ class AppointmentSelectView(APIView):
 
 #Временное решение класса Доктора
 class DoctorListView(APIView):
-    def get():
+    def get(self, request):
         doctors = Doctor.objects.all()
         serializer = DoctorSerilizer(doctors, many=True)
         return Response(serializer.data)
+
 
 class DoctorAddView(APIView):
     def post(self, request):
@@ -66,3 +68,17 @@ class DoctorAddView(APIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
+
+
+class SpecialistListView(APIView):
+    def get(self, request):
+        services = Specialist.objects.all()
+        serializer = SpecialistSerializer(services, many=True)
+        return Response(serializer.data)
+    
+
+class ClinicListListView(APIView):
+    def get(self, request):
+        clinics = Clinic.objects.all()
+        serializer = ClinicSerializer(clinics, many=True)
+        return Response(serializer.data)

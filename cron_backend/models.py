@@ -2,18 +2,43 @@ from django.db import models
 from django.conf import settings
 
 
+class Clinic(models.Model):
+    title = models.CharField(max_length=250)
+    location = models.CharField(max_length=250)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = 'Клиника'
+        verbose_name_plural = 'Клиники'
+
+
+class Specialist(models.Model):
+    type = models.CharField(max_length=150)
+
+    def __str__(self):
+        return self.type
+
+    class Meta:
+        verbose_name = 'Услуга'
+        verbose_name_plural = 'Услуги'
+
+
+
 class Doctor(models.Model):
     name = models.CharField(max_length=50)
     surname = models.CharField(max_length=50)
-    specialization = models.CharField(max_length=50)
+    speciality = models.ForeignKey(Specialist, on_delete=models.CASCADE)
+    clinic = models.ForeignKey(Clinic, on_delete=models.CASCADE)
+    price = models.FloatField(null=True)
 
     def __str__(self):
-        return self.specialization +' '+ self.surname + ' ' +self.name
+        return self.name+' '+self.surname
 
     class Meta:
-        verbose_name = 'Стоматолог'
-        verbose_name_plural = 'Стоматологи'  
-
+        verbose_name = 'Врач'
+        verbose_name_plural = 'Врачи'
 
 
 class Appointment(models.Model):

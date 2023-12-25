@@ -149,8 +149,10 @@
         methods: {
             closeModal: function () {
                 this.show = false
-            }
+            },
+            
         }
+
     }
 </script>
  
