@@ -23,8 +23,14 @@
           <span>{{ klinic.type }}</span>
           <span>{{ klinic.price }}</span>
         </div> -->
-        <span class="modal__zapiz-info">Окончательная цена устанавливается после осмотра</span>
-        <a class="modal__zapiz-a" href="#">Записаться</a>
+        <span class="modal__zapiz-info"
+          >Окончательная цена устанавливается после осмотра</span
+        >
+        <form>
+          <input type="text" name="clinic" :value="clinic.title" />
+          <input type/>
+          <button class="modal__zapiz-a" href="#">Записаться</button>
+        </form>
       </div>
     </div>
   </div>
