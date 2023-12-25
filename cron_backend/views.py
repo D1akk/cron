@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from django.conf import settings
-from .models import Appointment, Doctor, Specialist, Clinic
-from .serializers import AppointmentSerializer, DoctorSerilizer, SpecialistSerializer, ClinicSerializer
+from .models import Appointment, Doctor, Service, Clinic
+from .serializers import AppointmentSerializer, DoctorSerilizer, ServiceSerializer, ClinicSerializer
 
 
 class Login(ObtainAuthToken):
@@ -70,10 +70,10 @@ class DoctorAddView(APIView):
             return Response(serializer.data)
 
 
-class SpecialistListView(APIView):
+class ServiceListView(APIView):
     def get(self, request):
-        services = Specialist.objects.all()
-        serializer = SpecialistSerializer(services, many=True)
+        services = Service.objects.all()
+        serializer = ServiceSerializer(services, many=True)
         return Response(serializer.data)
     
 
@@ -82,3 +82,13 @@ class ClinicListListView(APIView):
         clinics = Clinic.objects.all()
         serializer = ClinicSerializer(clinics, many=True)
         return Response(serializer.data)
+    
+
+class ClinicDetailsView(APIView):
+    def get(self, request, clinic_id):
+        try:
+            clinic = Clinic.objects.get(id=clinic_id)
+            serializer = ClinicSerializer(clinic)
+            return Response(serializer.data)
+        except Clinic.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)

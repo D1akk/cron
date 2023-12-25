@@ -26,11 +26,17 @@
         <span class="modal__zapiz-info"
           >Окончательная цена устанавливается после осмотра</span
         >
-        <form>
-          <input type="text" name="clinic" :value="clinic.title" />
-          <input type/>
-          <button class="modal__zapiz-a" href="#">Записаться</button>
-        </form>
+        <!-- <form> -->
+        <!-- <input type="text" name="clinic" :value="clinic.title" /> -->
+        <button
+          class="modal-footer__button"
+          @click="createAppointmentAndCloseModal(clinic.id)"
+        >
+          Создать запись
+        </button>
+
+        <a class="modal__zapiz-a" href="#">Записаться</a>
+        <!-- </form> -->
       </div>
     </div>
   </div>
@@ -38,6 +44,7 @@
 
 <script>
 import axios from "axios";
+
 export default {
   name: "SelectZapiz",
   data: function () {
@@ -94,6 +101,10 @@ export default {
         .catch((error) => {
           console.error(error);
         });
+    },
+    createAppointmentAndCloseModal: function (selectedClinicId) {
+      this.$emit("create-appointment", selectedClinicId);
+      // this.closeModal();
     },
   },
   mounted() {

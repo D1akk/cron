@@ -22,6 +22,7 @@
             name="usluga"
             id="usluga"
             type="radio"
+            @change="emitSelectedUsluga(parentUsluga.id)"
           />
           <span class="home__mid__cart-big">{{ parentUsluga.type }}</span>
         </label>
@@ -39,23 +40,26 @@
 
 <script>
 export default {
-    name: "SelectUsluga",
-    data: function () {
-        return {
-            show: false,
-            selectedUsluga: null,
-        }
+  name: "SelectUsluga",
+  data: function () {
+    return {
+      show: false,
+      selectedUsluga: null,
+    };
+  },
+  props: {
+    parentUslugas: Array,
+  },
+  methods: {
+    closeModal: function () {
+      this.show = false;
     },
-    props: {
-        parentUslugas: Array
+    emitSelectedUsluga: function (selectedUslugaId) {
+      this.$emit("selected-usluga", selectedUslugaId); // Эмитирование события с выбранным ID услуги
+      // this.show = false; // Закрываем модальное окно после выбора
     },
-    methods: {
-        closeModal: function () {
-            this.show = false
-        }
-    
-    }
-}
+  },
+};
 </script>
 
 <style>

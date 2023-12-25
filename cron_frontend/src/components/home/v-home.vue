@@ -19,12 +19,23 @@
               <svg width="32" height="32">
                 <use xlink:href="../../assets/img/sprite.svg#calendar"></use>
               </svg>
-              <span>15.09.2023</span>
+              <span
+                >{{ selectedDate.day }}.{{ selectedDate.month }}.{{
+                  selectedDate.year
+                }}</span
+              >
             </div>
-            <span class="home-top__box-bottom-spam">{{ selectedDate }}</span>
-            <span class="home-top__box-bottom-spam">Сегодня</span>
+            <span class="home-top__box-bottom-spam"
+              >{{ selectedDate.day }}.{{ selectedDate.month }}.{{
+                selectedDate.year
+              }}</span
+            >
+            <!-- <span class="home-top__box-bottom-spam">Сегодня</span> -->
           </a>
-          <SelectData ref="modalDate"></SelectData>
+          <SelectData
+            @selected-date="updateSelectedDate"
+            ref="modalDate"
+          ></SelectData>
           <a href="#" @click="showModalUsluga" class="home-top__box orange">
             <div class="home-top__box__flex">
               <svg width="32" height="32">
@@ -37,6 +48,7 @@
           <SelectUsluga
             :parentUslugas="uslugas"
             v-model="selectedUsluga"
+            @selected-usluga="handleSelectedUsluga"
             ref="modalUsluga"
           ></SelectUsluga>
         </div>
@@ -67,7 +79,10 @@
             <span class="home__mid__cart-small">{{ time.minute }}</span>
           </label>
         </div>
-        <SelectZapiz ref="modalZapiz"></SelectZapiz>
+        <SelectZapiz
+          ref="modalZapiz"
+          @create-appointment="createAppointment"
+        ></SelectZapiz>
       </div>
     </div>
     <div class="home__bottom">
@@ -112,7 +127,7 @@ export default {
   },
   data() {
     return {
-      selectedOption: null, // Значение выбранной опции
+      selectedOption: null,
       times: [
         {
           hour: "09",
@@ -177,7 +192,11 @@ export default {
         },
       ],
       uslugas: [],
-      selectedDate: null,
+      selectedDate: {
+        day: 1,
+        month: 11,
+        year: 2023,
+      },
       selectedUsluga: null,
     };
   },
@@ -200,6 +219,37 @@ export default {
         })
         .catch((error) => {
           console.error(error);
+        });
+    },
+    handleSelectedUsluga(selectedUslugaId) {
+      this.selectedUslugaId = selectedUslugaId;
+    },
+    updateSelectedDate(selectedDate) {
+      //Обновление только дня
+      this.selectedDate.day = selectedDate.day;
+    },
+    createAppointment(selectedClinicId) {
+      const appointmentData = {
+        title: "test",
+        service: this.selectedUslugaId,
+        patient: this.$store.state.user_id,
+        date:
+          this.selectedDate.day +
+          "." +
+          this.selectedDate.month +
+          "." +
+          this.selectedDate.year,
+        time: this.selectedOption+':00',
+        status: "good",
+        clinic: selectedClinicId,
+      };
+      axios
+        .post("/appointment-add/", appointmentData)
+        .then((response) => {
+          console.log("Успеш", response.data);
+        })
+        .catch((error) => {
+          console.log(error);
         });
     },
   },

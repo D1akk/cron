@@ -14,7 +14,7 @@ class Clinic(models.Model):
         verbose_name_plural = 'Клиники'
 
 
-class Specialist(models.Model):
+class Service(models.Model):
     type = models.CharField(max_length=150)
 
     def __str__(self):
@@ -29,7 +29,7 @@ class Specialist(models.Model):
 class Doctor(models.Model):
     name = models.CharField(max_length=50)
     surname = models.CharField(max_length=50)
-    speciality = models.ForeignKey(Specialist, on_delete=models.CASCADE)
+    speciality = models.ForeignKey(Service, on_delete=models.CASCADE)
     clinic = models.ForeignKey(Clinic, on_delete=models.CASCADE)
     price = models.FloatField(null=True)
 
@@ -42,8 +42,10 @@ class Doctor(models.Model):
 
 
 class Appointment(models.Model):
-    patient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    patient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=True, blank=True)
+    # doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, null=True, blank=True)
+    service = models.ForeignKey(Service, on_delete= models.CASCADE, null=True, blank=True)
+    clinic = models.ForeignKey(Clinic, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=150)
     date = models.CharField(max_length=20)
     time = models.CharField(max_length=20)

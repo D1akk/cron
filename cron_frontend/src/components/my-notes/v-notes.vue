@@ -5,8 +5,10 @@
         <span class="notes__top-time">{{ note.time }}</span>
         <span class="notes__top-date">{{ note.date }}</span>
       </div>
-      <span class="notes-span1">{{ note.type }}</span>
-      <span class="notes-span2">{{ note.info }}</span>
+      <span class="notes-span1">{{ note.clinicTitle }}</span>
+      <span class="notes-span3">{{ note.clinicLocation }}</span>
+      
+      <span class="notes-span2">Вам напомнят за 30 минут до приема</span>
       <div class="otmena">
         <span>Отменить запись</span>
       </div>
@@ -15,60 +17,88 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 export default {
-    name: 'v-notes',
-    components: {
-    },
-    data() {
-        return {
-            notes: [
-                // {
-                //     time: '13:00',
-                //     date: '16.09.2023',
-                //     type: 'Запись к терапевту',
-                //     info: 'Вам напомнят за 30 минут до приема'
-                // },
-                // {
-                //     time: '13:00',
-                //     date: '16.09.2023',
-                //     type: 'Запись к терапевту',
-                //     info: 'Вам напомнят за 30 минут до приема'
-                // },
-                // {
-                //     time: '13:00',
-                //     date: '16.09.2023',
-                //     type: 'Запись к терапевту',
-                //     info: 'Вам напомнят за 30 минут до приема'
-                // },
-                // {
-                //     time: '13:00',
-                //     date: '16.09.2023',
-                //     type: 'Запись к терапевту',
-                //     info: 'Вам напомнят за 30 минут до приема'
-                // }
-            ]
-        }
+  name: "v-notes",
+  components: {},
+  data() {
+    return {
+      notes: [
+        // {
+        //     time: '13:00',
+        //     date: '16.09.2023',
+        //     type: 'Запись к терапевту',
+        //     info: 'Вам напомнят за 30 минут до приема'
+        // },
+        // {
+        //     time: '13:00',
+        //     date: '16.09.2023',
+        //     type: 'Запись к терапевту',
+        //     info: 'Вам напомнят за 30 минут до приема'
+        // },
+        // {
+        //     time: '13:00',
+        //     date: '16.09.2023',
+        //     type: 'Запись к терапевту',
+        //     info: 'Вам напомнят за 30 минут до приема'
+        // },
+        // {
+        //     time: '13:00',
+        //     date: '16.09.2023',
+        //     type: 'Запись к терапевту',
+        //     info: 'Вам напомнят за 30 минут до приема'
+        // }
+      ],
+      clinics: {},
+    };
+  },
+  methods: {
+    fetchApointmentsList() {
+      // console.log("User ID:", this.$store.state.user_id);
+      // console.log("Token:", this.$store.state.token);
+      if (!this.$store.state.user_id) {
+        return;
+      }
+      axios.defaults.headers[
+        "Authorization"
+      ] = `Token ${this.$store.state.token}`;
+      const url = "/appointment-list/";
+      // const user_id = this.$store.state.user_id;
+      axios
+        .get(url)
+        .then((response) => {
+          // Фильтрация записей для текущего пользователя
+          const filteredNotes = response.data.filter(
+            (note) => note.patient == this.$store.state.user_id
+          );
 
+          // Получение названия клиники для каждой записи
+          const promises = filteredNotes.map((note) =>
+            axios.get(`/clinic-details/${note.clinic}/`)
+          );
+
+          // Обработка всех запросов
+          axios.all(promises).then((clinicResponses) => {
+            clinicResponses.forEach((clinicResponse, index) => {
+              filteredNotes[index].clinicTitle = clinicResponse.data.title;
+              filteredNotes[index].clinicLocation = clinicResponse.data.location;
+            });
+
+            // Обновление состояния компонента
+            this.notes = filteredNotes;
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
-    methods:{
-        fetchApointmentsList(){
-            axios.defaults.headers['Authorization']=`Token ${this.$store.state.token}`;
-            const url = '/appointment-list/';
-            axios.get(url)
-            .then(response => {
-                console.log(response.data);
-            })
-            .catch(error=>{
-                console.log(error);
-            })
-        }
-    },
-    mounted(){
-        this.fetchApointmentsList();
-    }
-}
+  },
+  mounted() {
+    this.fetchApointmentsList();
+  },
+};
 </script>
+
 <style>
 .v-notes {
   display: flex;
@@ -114,6 +144,20 @@ export default {
   margin-bottom: 20px;
   display: block;
 }
+
+.notes-span3 {
+  font-size: 12px;
+  margin-bottom: 20px;
+  display: block;
+}
+
+
+.notes-span4 {
+  font-size: 12px;
+  margin-bottom: 20px;
+  display: block;
+}
+
 
 .otmena {
   border-top: 1px solid var(--light-grey);
