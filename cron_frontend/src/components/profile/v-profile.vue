@@ -19,9 +19,9 @@
       <span class="profile-mid-greu">Телефон</span>
       <span class="profile-mid-black">+7 (999)-123-45-67</span>
       <div class="profile-mid-redactor">Редактировать профиль</div>
-      <button class="profile-mid-exit" @click="logout">
-        Выйти из аккаунта
-      </button>
+      <div class="profile-mid-exit">
+        <a @click="logout">Выйти из аккаунта</a>
+      </div>
     </div>
     <div class="profile-bottom">
       <div href="#" class="profile-top__box">
@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: "v-profile",
   components: {},
@@ -59,9 +60,53 @@ export default {
   },
   methods: {
     logout() {
-      this.$store.commit('removeToken');
-      this.$router.push('/login');
+      this.$store.commit("removeToken");
+      this.$router.push("/login");
     },
+    
+    fetchApointmentsList() {
+      // console.log("User ID:", this.$store.state.user_id);
+      // console.log("Token:", this.$store.state.token);
+      if (!this.$store.state.user_id) {
+        return;
+      }
+      axios.defaults.headers[
+        "Authorization"
+      ] = `Token ${this.$store.state.token}`;
+      const url = "/appointment-list/";
+      // const user_id = this.$store.state.user_id;
+      axios
+        .get(url)
+        .then((response) => {
+          // Фильтрация записей для текущего пользователя
+          const filteredNotes = response.data.filter(
+            (note) => note.patient == this.$store.state.user_id
+          );
+
+          // Получение названия клиники для каждой записи
+          const promises = filteredNotes.map((note) =>
+            axios.get(`/clinic-details/${note.clinic}/`)
+          );
+
+          // Обработка всех запросов
+          axios.all(promises).then((clinicResponses) => {
+            clinicResponses.forEach((clinicResponse, index) => {
+              filteredNotes[index].clinicTitle = clinicResponse.data.title;
+              filteredNotes[index].clinicLocation = clinicResponse.data.location;
+            });
+
+            // Обновление состояния компонента
+            this.notes = filteredNotes;
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
+
+  mounted() {
+    this.fetchApointmentsList();
   },
 };
 </script>
@@ -127,12 +172,15 @@ export default {
   border-bottom: 1px solid var(--light-grey);
 }
 
-.profile-mid-exit {
-  border: 0;
+.profile-mid-exit{
   color: #ff2e2e;
   line-height: 150%; /* 24px */
   letter-spacing: -0.176px;
   padding: 20px 0 0;
+}
+
+.profile-mid-exit a{
+  color: #ff2e2e
 }
 
 .profile-bottom {

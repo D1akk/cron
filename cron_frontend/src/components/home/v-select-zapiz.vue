@@ -28,14 +28,13 @@
         >
         <!-- <form> -->
         <!-- <input type="text" name="clinic" :value="clinic.title" /> -->
-        <button
-          class="modal-footer__button"
-          @click="createAppointmentAndCloseModal(clinic.id)"
-        >
-          Создать запись
-        </button>
 
-        <a class="modal__zapiz-a" href="#">Записаться</a>
+        <a
+          @click="createAppointmentAndCloseModal(clinic.id)"
+          class="modal__zapiz-a"
+          href="#"
+          >Записаться</a
+        >
         <!-- </form> -->
       </div>
     </div>
@@ -104,7 +103,8 @@ export default {
     },
     createAppointmentAndCloseModal: function (selectedClinicId) {
       this.$emit("create-appointment", selectedClinicId);
-      // this.closeModal();
+      this.closeModal();
+      alert("Запись успешно создана");
     },
   },
   mounted() {

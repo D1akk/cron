@@ -52,14 +52,14 @@ class Appointment(models.Model):
     # doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, null=True, blank=True)
     service = models.ForeignKey(Service, on_delete= models.CASCADE, null=True, blank=True)
     clinic = models.ForeignKey(Clinic, on_delete=models.CASCADE, null=True, blank=True)
-    title = models.CharField(max_length=150)
+    # title = models.CharField(max_length=150)
     date = models.CharField(max_length=20)
     time = models.CharField(max_length=20)
-    status = models.CharField(max_length=20)
+    # status = models.CharField(max_length=20)
 
 
     def __str__(self) -> str:
-        return self.title
+        return "Запись на " + self.date
 
     class Meta:
         verbose_name = 'Запись'

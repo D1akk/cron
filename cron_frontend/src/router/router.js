@@ -12,37 +12,37 @@ const routes = [
     path: "/",
     name: "home",
     component: vHome,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
   },
   {
     path: "/my-notes",
     name: "my-notes",
     component: vMyNotes,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
   },
   {
     path: "/doctors",
     name: "doctors",
     component: vDoctors,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
   },
   {
     path: "/profile",
     name: "profile",
     component: vProfile,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
   },
   {
     path: "/login",
     name: "login",
     component: vLogin,
-    meta: { requiresAuth: false }
+    meta: { requiresAuth: false },
   },
   {
     path: "/signup",
     name: "signup",
     component: vSignup,
-    meta: { requiresAuth: false }
+    meta: { requiresAuth: false },
   },
 ];
 
@@ -51,41 +51,41 @@ const router = createRouter({
   routes,
 });
 
-const protectedRoutes = ['my-notes', 'doctors', 'profile', 'home'];
-
-router.beforeEach((to, from, next) => {
-  const isProtected = protectedRoutes.includes(to.name);
-  if (isProtected && !localStorage.getItem("token")) {
-    next({
-      path: "/",
-      query: { redirect: to.fullPath },
-    });
-  } else {
-    if (
-      !isProtected &&
-      localStorage.getItem("token") &&
-      (to.name == "home" || to.name == "signup")
-    ) {
-      next({
-        path: "",
-      });
-    } else {
-      next();
-    }
-  }
-});
+const protectedRoutes = ["my-notes", "doctors", "profile", "home"];
 
 // router.beforeEach((to, from, next) => {
 //   const isProtected = protectedRoutes.includes(to.name);
-//   const isAuthenticated = localStorage.getItem('token');
-
-//   if (isProtected && !isAuthenticated) {
-//     next({ name: 'login', query: { redirect: to.fullPath } });
-//   } else if (!isProtected && isAuthenticated) {
-//     next('/');
+//   if (isProtected && !localStorage.getItem("token")) {
+//     next({
+//       path: "/",
+//       query: { redirect: to.fullPath },
+//     });
 //   } else {
-//     next();
+//     if (
+//       !isProtected &&
+//       localStorage.getItem("token") &&
+//       (to.name == "home" || to.name == "signup")
+//     ) {
+//       next({
+//         path: "",
+//       });
+//     } else {
+//       next();
+//     }
 //   }
 // });
+
+router.beforeEach((to, from, next) => {
+  const isProtected = protectedRoutes.includes(to.name);
+  const isAuthenticated = localStorage.getItem("token");
+
+  if (isProtected && !isAuthenticated) {
+    next({ name: "login", query: { redirect: to.fullPath } });
+  } else if (!isProtected && isAuthenticated) {
+    next("/");
+  } else {
+    next();
+  }
+});
 
 export default router;
