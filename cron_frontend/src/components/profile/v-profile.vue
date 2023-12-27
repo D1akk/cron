@@ -128,6 +128,7 @@ export default {
 }
 
 .profile-mid-exit {
+  border: 0;
   color: #ff2e2e;
   line-height: 150%; /* 24px */
   letter-spacing: -0.176px;

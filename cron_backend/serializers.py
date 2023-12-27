@@ -2,6 +2,12 @@ from rest_framework import serializers
 from .models import Appointment, Doctor, Service, Clinic
 
 
+# class CustomUserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = CustomUser
+#         fields = ('id', 'username', 'fio', 'phone') 
+
+
 class ClinicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Clinic
